@@ -22,6 +22,8 @@ services:
     - default
   mongodb:
     image: mongo
+    volumes:
+      - persistent:/data/db
     container_name: mongo_db
     ports:
       - 27017:27017
