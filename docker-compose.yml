@@ -1,0 +1,47 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: api
+    ports:
+      - "8000:8000"
+    environment:
+    - DB_CONNECTION=mongodb
+    - DB_HOST=mongodb
+    - DB_PORT=27017
+    - DB_DATABASE=mydatabase
+    - DB_USERNAME=root
+    - DB_PASSWORD=root
+    volumes:
+      - .:/var/www/html
+    depends_on:
+    - mongodb
+    networks:
+    - default
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=mydatabase
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    networks:
+        - default
+  mongo-gui:
+    container_name: "mongo-gui"
+    image: ugleiton/mongo-gui
+    ports:
+      - "4321:4321"
+    environment:
+      - MONGO_URL=mongodb:/0.0.0.0:27017
+      - MONGO_URL=mongodb://root:root@mongo_db:27017
+    networks:
+        - default
+    depends_on:
+    - mongodb
+volumes:
+    persistent:
