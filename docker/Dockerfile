@@ -14,7 +14,10 @@ RUN curl -sSL https://getcomposer.org/installer | php \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql
-RUN apt-get update && apt-get install -y git zip unzip libcurl4-openssl-dev pkg-config libssl-dev
+RUN apt-get update && apt-get install -y git zip unzip libcurl4-openssl-dev pkg-config libssl-dev libgd-dev
+
+RUN docker-php-ext-install gd &&\
+    docker-php-ext-enable gd
 
 
 RUN pecl install mongodb \

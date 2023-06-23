@@ -13,8 +13,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
-    }
+        $this->app 
+        ->singleton( 
+            NoteRepository::class, 
+            NoteRepositoryEloquent::class 
+        ); 
+        $this->app 
+            ->singleton( 
+                NoteService::class, 
+                function ($app) { 
+                    return new NoteService( 
+                        $app->make(NoteRepository::class) 
+                    ); 
+                } 
+            );
+        }
 
     /**
      * Bootstrap any application services.
