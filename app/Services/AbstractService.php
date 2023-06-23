@@ -7,6 +7,7 @@ namespace App\Services;
 abstract class AbstractService
 {
     protected $repository;
+    protected $pixAdapter;
 
     public function getAll()
     {
@@ -21,7 +22,11 @@ abstract class AbstractService
 
     public function store($data)
     {
-        return $this->repository->store($data);
+        $dataConverted = $this->pixAdapter->getAdaptPix($data);
+        if($dataConverted) {
+            return $this->repository->store($dataConverted);
+        }
+        throw new \Exception('Error during conversion');
     }
 
     public function update($id, $data)

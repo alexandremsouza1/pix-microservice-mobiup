@@ -24,7 +24,10 @@ abstract class AbstractRepository implements IEntityRepository
 
     public function store($data)
     {
-        return $this->model->create($data);
+        if($this->model->validate($data)) {
+            return $this->model->create($data);
+        }
+        throw new \Exception('Data is not valid');
     }
 
     public function update($id, $data)

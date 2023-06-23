@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Interfaces\Adapters;
+namespace App\Adapters\Interfaces;
 
 interface PixAdapterInterface
 {
-    public function getPix(): array;
+    public function getAdaptPix($data): array;
 }

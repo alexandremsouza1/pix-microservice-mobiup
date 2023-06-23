@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Adapters\Interfaces\PixAdapterInterface;
+use App\Adapters\PixItauAdapter;
+use App\Models\Pix;
+use App\Repositories\PixRepository;
+use App\Services\PixService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,21 +18,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app 
-        ->singleton( 
-            NoteRepository::class, 
-            NoteRepositoryEloquent::class 
-        ); 
-        $this->app 
-            ->singleton( 
-                NoteService::class, 
-                function ($app) { 
-                    return new NoteService( 
-                        $app->make(NoteRepository::class) 
-                    ); 
-                } 
+        $this->app->singleton(PixAdapterInterface::class, PixItauAdapter::class);
+    
+        $this->app->singleton(PixRepository::class, function ($app) {
+            return new PixRepository($app->make(Pix::class));
+        });
+        
+        $this->app->singleton(PixService::class, function ($app) {
+            return new PixService(
+                $app->make(PixRepository::class),
+                $app->make(PixAdapterInterface::class)
             );
-        }
+        });
+    }
 
     /**
      * Bootstrap any application services.
