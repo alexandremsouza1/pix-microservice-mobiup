@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Sdkpayment\Itau\Service;
+namespace App\Integrations\Itau\Service;
 
-use App\Sdkpayment\Itau\Models\Response as ModelsResponse;
-use App\Sdkpayment\Itau\Models\Settings as ModelsSettings;
+use App\Integrations\Itau\Models\Response as ModelsResponse;
 use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;

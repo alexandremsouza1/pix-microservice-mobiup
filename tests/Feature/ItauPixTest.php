@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Sdkpayment\Itau\Service\Factory;
+use App\Integrations\Itau\Service\Factory;
 use Tests\TestCase;
 
 class ItauPixTest extends TestCase

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
@@ -16,22 +17,14 @@ abstract class BaseModel extends Eloquent
 {
     const PRIMARY_KEY       = '_id';
     protected $connection   = 'mongodb';
-    protected $rules        = [];
 
 
-    /**
-     * Timestamp field
-     *
-     * @var array
-     */
-    protected $dates =  [
-      'created_at', 'updated_at', 'deleted_at'
-    ];
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->exchangeArray($attributes);
+    }
 
-
-    protected $casts = [
-      '_id' => 'string',
-    ];
 
     /**
      * @param $data
@@ -49,5 +42,36 @@ abstract class BaseModel extends Eloquent
           return false;
         }
         return true;
+    }
+
+    /**
+     * Set the fillable attributes for the model.
+     *
+     * @param array $input
+     */
+    public function exchangeArray(array $input)
+    {
+        $fillable = array_intersect(array_keys($input), $this->fillable);
+        $this->fillable = array_merge($fillable, $this->dates);
+
+        foreach ($fillable as $attribute) {
+            $this->$attribute = $input[$attribute];
+        }
+    }
+
+    /**
+     * Get the fillable attributes for the model.
+     *
+     * @return array
+     */
+    public function getFillableAttributes()
+    {
+        $attributes = [];
+
+        foreach ($this->fillable as $attribute) {
+            $attributes[$attribute] = $this->$attribute;
+        }
+
+        return $attributes;
     }
 }

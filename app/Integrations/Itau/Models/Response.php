@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sdkpayment\Itau\Models;
+namespace App\Integrations\Itau\Models;
 
 class Response extends DefaultModel
 {

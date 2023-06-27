@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Sdkpayment\Itau\Service;
+namespace App\Integrations\Itau\Service;
 
-use App\Sdkpayment\Itau\Models\Pix\Pix;
+use App\Integrations\Itau\Models\Pix\Pix;
 use Exception;
 
 class Factory extends Client

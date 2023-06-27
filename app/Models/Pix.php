@@ -3,12 +3,14 @@
 namespace App\Models;
 
 
-use Jenssegers\Mongodb\Eloquent\SoftDeletes as SoftDeletes;
+use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Pix extends BaseModel
 {
 
     use SoftDeletes;
+
+    protected $collection = 'pix';
     /**
     * Timestamp field
     *
@@ -20,7 +22,7 @@ class Pix extends BaseModel
 
 
     protected $fillable = [
-        'amount','paymentId','copyAndPaste', 'image','qrCode','expireAt'
+        'amount','paymentId','copyAndPaste', 'customer','qrCode','expireAt'
     ];
 
     /**
@@ -31,9 +33,8 @@ class Pix extends BaseModel
     protected $rules = [
         'amount'       => 'required|int',
         'paymentId'    => 'required|string',
-        'customer'     => 'required|object',
+        'customer'     => 'required',
         'copyAndPaste' => 'required|string',
-        'image'        => 'required|string',
         'qrCode'       => 'required|string',
         'expireAt'     => 'required|string'
     ];

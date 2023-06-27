@@ -22,9 +22,9 @@ abstract class AbstractService
 
     public function store($data)
     {
-        $dataConverted = $this->pixAdapter->getAdaptPix($data);
-        if($dataConverted) {
-            return $this->repository->store($dataConverted);
+        $pix = $this->pixAdapter->getAdaptPix($data);
+        if($pix) {
+            return $pix->save();
         }
         throw new \Exception('Error during conversion');
     }

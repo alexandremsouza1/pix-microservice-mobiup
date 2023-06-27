@@ -2,7 +2,9 @@
 
 namespace App\Adapters\Interfaces;
 
+use App\Models\Pix;
+
 interface PixAdapterInterface
 {
-    public function getAdaptPix($data): array;
+    public function getAdaptPix($data): Pix;
 }

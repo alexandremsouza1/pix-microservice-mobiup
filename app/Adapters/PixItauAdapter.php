@@ -3,6 +3,9 @@
 namespace App\Adapters;
 
 use App\Adapters\Interfaces\PixAdapterInterface;
+use App\Integrations\Itau\Service\Factory;
+use App\Models\Pix;
+use Carbon\Carbon;
 
 class PixItauAdapter implements PixAdapterInterface
 {
@@ -30,12 +33,14 @@ class PixItauAdapter implements PixAdapterInterface
     ];
 
 
-    public function getAdaptPix($data): array
+    public function getAdaptPix($data): Pix
     {
         $pixAdaptIntegration = $this->adaptIntegrationPix($data);
-        $pixConverted        = $this->adaptPix($pixAdaptIntegration);
+        $factory = new Factory();
+        $resultPixAdaptIntegration = $factory->build($pixAdaptIntegration);
+        $pix       = $this->adaptPix($data,$resultPixAdaptIntegration);
 
-        return $pixConverted;
+        return $pix;
     }
 
     private function adaptIntegrationPix($data): array
@@ -65,9 +70,29 @@ class PixItauAdapter implements PixAdapterInterface
         return (array) $object;
     }
 
-    private function adaptPix($data): array
+    private function adaptPix($origin,$data): Pix
     {
-        
-        return $data;
+        $result = new Pix([
+            'amount' => $origin['amount'],
+            'paymentId' => $origin['paymentId'],
+            'customer' => $origin['customer'],
+            'copyAndPaste'=> $data->pixCopiaECola, 
+            'qrCode' => ( new \chillerlan\QRCode\QRCode)->render($data->pixCopiaECola),
+            'expireAt' =>  $this->calculateExpirationPixDate($data->calendario)
+        ]);
+        return $result;
+    }
+
+    private function calculateExpirationPixDate(Object $calendar) : string
+    {
+        // Extract the creation date and expiration time from the provided data
+        $criacao = Carbon::parse($calendar->criacao);
+        $expiracaoInMilliseconds = $calendar->expiracao;
+
+        // Calculate the expiration date
+        $expiracao = $criacao->addMilliseconds($expiracaoInMilliseconds);
+
+        // Format the expiration date as desired (e.g., to a specific format)
+        return $expiracao->toDateTimeString();
     }
 }

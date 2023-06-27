@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Sdkpayment\Itau\Models\Pix;
+namespace App\Integrations\Itau\Models\Pix;
 
 class Pix
 {

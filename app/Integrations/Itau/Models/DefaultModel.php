@@ -1,4 +1,4 @@
-<?php namespace App\Sdkpayment\Itau\Models;
+<?php namespace App\Integrations\Itau\Models;
 
 use Exception;
 
