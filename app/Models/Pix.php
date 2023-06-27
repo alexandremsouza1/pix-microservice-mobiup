@@ -7,7 +7,18 @@ use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Pix extends BaseModel
 {
-
+    /**
+     * @OA\Schema(
+     *     schema="PixResource",
+     *     type="object",
+     *     @OA\Property(property="amount", type="string"),
+     *     @OA\Property(property="paymentId", type="string"),
+     *     @OA\Property(property="copyAndPaste", type="string"),
+     *     @OA\Property(property="customer", type="string"),
+     *     @OA\Property(property="qrCode", type="string"),
+     *     @OA\Property(property="expireAt", type="string")
+     * )
+     */
     use SoftDeletes;
 
     protected $collection = 'pix';
