@@ -6,5 +6,5 @@ use App\Models\Pix;
 
 interface PixAdapterInterface
 {
-    public function getAdaptPix($data): Pix;
+    public function getAdaptPix($data): array;
 }

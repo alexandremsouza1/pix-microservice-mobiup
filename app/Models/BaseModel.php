@@ -36,7 +36,7 @@ abstract class BaseModel extends Eloquent
           return false;
         }
 
-        $v = Validator::make($data, $this->rules);
+        $v = Validator::make($data, $this->rules());
         $v->validate();
         if ($v->fails()) {
           return false;

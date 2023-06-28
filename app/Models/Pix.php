@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use Illuminate\Validation\Rule;
 use Jenssegers\Mongodb\Eloquent\SoftDeletes;
 
 class Pix extends BaseModel
@@ -33,22 +33,29 @@ class Pix extends BaseModel
 
 
     protected $fillable = [
-        'amount','paymentId','copyAndPaste', 'customer','qrCode','expireAt'
+        '_id','status','amount','paymentId','copyAndPaste', 'customer','qrCode','expireAt'
     ];
+
+
+    const TYPES_STATUS = ['PENDING','WAITING','EXPIRED','ERROR','APPROVED','DENIED']; 
 
     /**
      * Basic rule of database
      *
      * @var array
      */
-    protected $rules = [
-        'amount'       => 'required|int',
-        'paymentId'    => 'required|string',
-        'customer'     => 'required',
-        'copyAndPaste' => 'required|string',
-        'qrCode'       => 'required|string',
-        'expireAt'     => 'required|string'
-    ];
+    public function rules()
+    {
+        return [
+            'status'       => ['required', Rule::in(self::TYPES_STATUS)],
+            'amount'       => 'required|int',
+            'paymentId'    => 'required|string',
+            'customer'     => 'required',
+            'copyAndPaste' => 'required|string',
+            'qrCode'       => 'required|string',
+            'expireAt'     => 'required|string'
+        ];
+    }
 
 
 }

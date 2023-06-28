@@ -18,6 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'pix'], function () {
     Route::get('/', [PixController::class, 'index']);
     Route::get('/{id}', [PixController::class, 'find']);
-    Route::get('/webhook', [PixController::class, 'listen']);
+    Route::patch('/{id}', [PixController::class, 'update']);
     Route::post('/', [PixController::class, 'create']);
 });

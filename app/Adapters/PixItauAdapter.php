@@ -33,14 +33,12 @@ class PixItauAdapter implements PixAdapterInterface
     ];
 
 
-    public function getAdaptPix($data): Pix
+    public function getAdaptPix($data): array
     {
         $pixAdaptIntegration = $this->adaptIntegrationPix($data);
         $factory = new Factory();
         $resultPixAdaptIntegration = $factory->build($pixAdaptIntegration);
-        $pix       = $this->adaptPix($data,$resultPixAdaptIntegration);
-
-        return $pix;
+        return $this->adaptPix($data,$resultPixAdaptIntegration);
     }
 
     private function adaptIntegrationPix($data): array
@@ -70,17 +68,18 @@ class PixItauAdapter implements PixAdapterInterface
         return (array) $object;
     }
 
-    private function adaptPix($origin,$data): Pix
+    private function adaptPix($origin,$data): array
     {
-        $result = new Pix([
+        return [
+            '_id' => $data->txid,
+            'status' => $this->getRealStatus($data->status),
             'amount' => $origin['amount'],
             'paymentId' => $origin['paymentId'],
             'customer' => $origin['customer'],
             'copyAndPaste'=> $data->pixCopiaECola, 
             'qrCode' => ( new \chillerlan\QRCode\QRCode)->render($data->pixCopiaECola),
             'expireAt' =>  $this->calculateExpirationPixDate($data->calendario)
-        ]);
-        return $result;
+        ];
     }
 
     private function calculateExpirationPixDate(Object $calendar) : string
@@ -93,6 +92,26 @@ class PixItauAdapter implements PixAdapterInterface
         $expiracao = $criacao->addMilliseconds($expiracaoInMilliseconds);
 
         // Format the expiration date as desired (e.g., to a specific format)
-        return $expiracao->toDateTimeString();
+        return $expiracao->format('Y-m-d\TH:i:s.u\Z');
+    }
+
+    private function getRealStatus($status)
+    {
+        $result = 'PENDING';
+        switch ($status) {
+            case 'ATIVA':
+                $result = 'WAITING';
+                break;
+            case 'CONCLUIDA':
+                $result = 'APPROVED';
+                break;
+            case 'REMOVIDA_PELO_PSP':
+                 $result = 'EXPIRED';
+                break;
+            case 'REMOVIDA_PELO_USUARIO_RECEBEDOR':
+                 $result = 'EXPIRED';
+                break;
+        }
+       return $result;
     }
 }

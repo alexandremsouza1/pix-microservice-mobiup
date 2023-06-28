@@ -22,9 +22,9 @@ abstract class AbstractService
 
     public function store($data)
     {
-        $pix = $this->pixAdapter->getAdaptPix($data);
-        if($pix) {
-            return $pix->save();
+        $result = $this->pixAdapter->getAdaptPix($data);
+        if($result) {
+            return $this->repository->store($result);
         }
         throw new \Exception('Error during conversion');
     }
@@ -35,7 +35,8 @@ abstract class AbstractService
         if (!$foundData)
             return null;
 
-        return $this->repository->update($id, $data);
+        $mergedData = array_merge($foundData->toArray(), $data);
+        return $this->repository->update($id, $mergedData);
     }
 
     public function delete($id)
