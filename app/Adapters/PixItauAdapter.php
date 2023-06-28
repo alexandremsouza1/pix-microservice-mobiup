@@ -4,7 +4,6 @@ namespace App\Adapters;
 
 use App\Adapters\Interfaces\PixAdapterInterface;
 use App\Integrations\Itau\Service\Factory;
-use App\Models\Pix;
 use Carbon\Carbon;
 
 class PixItauAdapter implements PixAdapterInterface
