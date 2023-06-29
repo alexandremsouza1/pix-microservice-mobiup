@@ -24,7 +24,7 @@ abstract class AbstractRepository implements IEntityRepository
         if($result) {
             return $result;
         }
-        throw new \Exception('Not found');
+        return false;
     }
 
     public function store($data)
@@ -33,7 +33,7 @@ abstract class AbstractRepository implements IEntityRepository
             $pixInstance = new $this->model($data);
             return  $pixInstance->save();
         }
-        throw new \Exception('Data is not valid');
+        return false;
     }
 
     public function update($id, $data)
@@ -42,11 +42,10 @@ abstract class AbstractRepository implements IEntityRepository
         $data['updated_at'] = $now->format('Y-m-d\TH:i:s.u\Z');
         if($this->model->validate($data)) {
             if(!$this->model->where('_id', $id)->update($data)) {
-                throw new \Exception('Not found');
+                return false;
             }
-            return true;
         }
-        throw new \Exception('Data is not valid');
+        return true;
     }
 
     public function delete($id)

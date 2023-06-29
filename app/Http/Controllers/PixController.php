@@ -81,29 +81,16 @@ class PixController extends BaseController
       $data = $request->all();
       $messageText = 'Pix criado com sucesso!';
       $statusCode = 200;
-      try {
-        $pix = $this->service->store($data);
-        return response()->json(['data' => $pix, 'message' => $messageText, 'status' => true], $statusCode);
-      } catch (Exception $e) {
-        $statusCode = 400;
-        $messageText = $e->getMessage();
-        return response()->json(['message' => $messageText, 'status' => false], $statusCode);
-      }
+      $pix = $this->service->store($data);
+      return response()->json(['data' => $pix, 'message' => $messageText, 'status' => true], $statusCode);
     }
 
     public function find($id): JsonResponse
     {
       $messageText = 'Pix '.$id.' encontrado com sucesso!';
       $statusCode = 200;
-      try {
-        $pix = $this->service->getById($id);
-        return response()->json(['data' => $pix, 'message' => $messageText, 'status' => true], $statusCode);
-      } catch (Exception $e) {
-        $statusCode = 400;
-        $messageText = $e->getMessage();
-        Log::error($messageText);
-        return response()->json(['message' => $messageText, 'status' => false], $statusCode);
-      }
+      $pix = $this->service->getById($id);
+      return response()->json(['data' => $pix, 'message' => $messageText, 'status' => true], $statusCode);
     }
 
     public function update(Request $request, $id) : JsonResponse
@@ -111,14 +98,7 @@ class PixController extends BaseController
       $data = $request->all();
       $messageText = 'Pix '.$id.' alterado com sucesso!';
       $statusCode = 200;
-      try {
-        $this->service->update($id,$data);
-        return response()->json(['message' => $messageText, 'status' => true], $statusCode);
-      } catch (Exception $e) {
-        $statusCode = 400;
-        $messageText = $e->getMessage();
-        Log::error($messageText);
-        return response()->json(['message' => $messageText, 'status' => false], $statusCode);
-      }
+      $this->service->update($id,$data);
+      return response()->json(['message' => $messageText, 'status' => true], $statusCode);
     }
 }

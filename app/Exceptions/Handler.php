@@ -2,7 +2,13 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Client\RequestException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +52,64 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        return $this->handleApiException($request, $exception);
+    }
+
+    protected function handleApiException($request, Throwable $exception)
+    {
+        $statusCode = $this->getStatusCodeFromException($exception);
+
+        $responseData = [
+            'message' => $exception->getMessage(),
+            'status' => false
+        ];
+
+        $this->log($exception);
+
+        return new JsonResponse($responseData, $statusCode);
+    }
+
+    protected function getStatusCodeFromException(Throwable $exception): int
+    {
+        if ($exception instanceof RequestException) {
+            // Exceção do GuzzleHttp
+            return $exception->getCode();
+        } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            // Exceção do Laravel
+            return $exception->getStatusCode();
+        } else {
+            // Outros casos de exceção
+            return Response::HTTP_INTERNAL_SERVER_ERROR;
+        }
+    }
+
+        /**
+     * Generate a log on server, and send a notification to admin
+     *
+     * @param HttpException $exception
+     * @param string    $message
+     * @param null      $context
+     */
+    private function log(HttpException $exception, $message = '', $context = null): void
+    {
+        try {
+            $logMessage = [
+                'ERROR_MSG' => $exception->getMessage(),
+                'CONTEXT' => $context,
+                'FILE' => $exception->getFile(),
+                'LINE' => $exception->getLine(),
+                'CODE' => $exception->getStatusCode(),
+                'MESSAGE' => $message,
+                'TRACE' => $exception->getTrace(),
+            ];
+
+            Log::error(json_encode($logMessage));
+        } catch (Exception $exception) {
+            Log::error($exception->getMessage());
+        }
     }
 }

@@ -3,6 +3,8 @@
 
 namespace App\Services;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\JsonResponse;
 
 abstract class AbstractService
 {
@@ -17,7 +19,11 @@ abstract class AbstractService
 
     public function getById($id)
     {
-        return $this->repository->find($id);
+        $result = $this->repository->find($id);
+        if($result) {
+            return $result;
+        }
+        throw new HttpException(JsonResponse::HTTP_NOT_FOUND, 'Not found');
     }
 
     public function store($data)
@@ -26,14 +32,14 @@ abstract class AbstractService
         if($result) {
             return $this->repository->store($result);
         }
-        throw new \Exception('Error during conversion');
+        throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, 'Error during conversion');
     }
 
     public function update($id, $data)
     {
         $foundData = $this->repository->find($id);
         if (!$foundData)
-            return null;
+            throw new HttpException(JsonResponse::HTTP_NOT_FOUND, 'Not found');
 
         $mergedData = array_merge($foundData->toArray(), $data);
         return $this->repository->update($id, $mergedData);
@@ -43,7 +49,7 @@ abstract class AbstractService
     {
         $foundData = $this->repository->find($id);
         if (!$foundData)
-            return null;
+            throw new HttpException(JsonResponse::HTTP_NOT_FOUND, 'Not found');
 
         return $this->repository->delete($id);
     }
