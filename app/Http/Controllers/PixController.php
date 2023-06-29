@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
 
 class PixController extends BaseController
 {
@@ -100,6 +101,7 @@ class PixController extends BaseController
       } catch (Exception $e) {
         $statusCode = 400;
         $messageText = $e->getMessage();
+        Log::error($messageText);
         return response()->json(['message' => $messageText, 'status' => false], $statusCode);
       }
     }
@@ -115,6 +117,7 @@ class PixController extends BaseController
       } catch (Exception $e) {
         $statusCode = 400;
         $messageText = $e->getMessage();
+        Log::error($messageText);
         return response()->json(['message' => $messageText, 'status' => false], $statusCode);
       }
     }

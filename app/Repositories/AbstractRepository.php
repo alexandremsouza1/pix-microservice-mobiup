@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 abstract class AbstractRepository implements IEntityRepository
@@ -19,7 +20,11 @@ abstract class AbstractRepository implements IEntityRepository
 
     public function find($id)
     {
-        return $this->model->find($id);
+        $result = $this->model->find($id);
+        if($result) {
+            return $result;
+        }
+        throw new \Exception('Not found');
     }
 
     public function store($data)
@@ -33,8 +38,13 @@ abstract class AbstractRepository implements IEntityRepository
 
     public function update($id, $data)
     {
+        $now = Carbon::now();
+        $data['updated_at'] = $now->format('Y-m-d\TH:i:s.u\Z');
         if($this->model->validate($data)) {
-            return $this->model->where('_id', $id)->update($data);
+            if(!$this->model->where('_id', $id)->update($data)) {
+                throw new \Exception('Not found');
+            }
+            return true;
         }
         throw new \Exception('Data is not valid');
     }

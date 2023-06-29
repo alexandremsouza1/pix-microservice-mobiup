@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y git zip unzip libcurl4-openssl-dev pkg-
 RUN docker-php-ext-install gd &&\
     docker-php-ext-enable gd
 
+RUN docker-php-ext-install sockets
+
 
 RUN pecl install mongodb \
      && docker-php-ext-enable mongodb
