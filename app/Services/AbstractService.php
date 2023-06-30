@@ -30,7 +30,8 @@ abstract class AbstractService
     {
         $result = $this->pixAdapter->getAdaptPix($data);
         if($result) {
-            return $this->repository->store($result);
+            $id = $this->repository->store($result);
+            return $this->repository->find($id);
         }
         throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, 'Error during conversion');
     }

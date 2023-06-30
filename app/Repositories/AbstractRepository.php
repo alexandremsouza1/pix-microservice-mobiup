@@ -31,7 +31,9 @@ abstract class AbstractRepository implements IEntityRepository
     {
         if($this->model->validate($data)) {
             $pixInstance = new $this->model($data);
-            return  $pixInstance->save();
+            if($pixInstance->save()) {
+                return $pixInstance->_id;
+            }
         }
         return false;
     }

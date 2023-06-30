@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
      * @param string    $message
      * @param null      $context
      */
-    private function log(HttpException $exception, $message = '', $context = null): void
+    private function log(Throwable $exception, $message = '', $context = null): void
     {
         try {
             $logMessage = [
@@ -102,7 +102,7 @@ class Handler extends ExceptionHandler
                 'CONTEXT' => $context,
                 'FILE' => $exception->getFile(),
                 'LINE' => $exception->getLine(),
-                'CODE' => $exception->getStatusCode(),
+                'CODE' =>  $this->getStatusCodeFromException($exception),
                 'MESSAGE' => $message,
                 'TRACE' => $exception->getTrace(),
             ];
