@@ -45,6 +45,151 @@
                         "description": "Forbidden"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Pix"
+                ],
+                "summary": "Create a new Pix",
+                "description": "Create a new Pix.",
+                "operationId": "2eb87799228e9f8b4d28d26f1cccd115",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "amount": {
+                                        "description": "The amount of the Pix",
+                                        "type": "string"
+                                    },
+                                    "paymentId": {
+                                        "description": "The payment ID of the Pix",
+                                        "type": "string"
+                                    },
+                                    "customer": {
+                                        "description": "The customer details",
+                                        "properties": {
+                                            "document": {
+                                                "description": "The customer's document",
+                                                "type": "string"
+                                            },
+                                            "firstName": {
+                                                "description": "The customer's first name",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PixResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/api/pix/{id}": {
+            "get": {
+                "tags": [
+                    "Pix"
+                ],
+                "summary": "Get a specific Pix",
+                "description": "Get a specific Pix by its ID.",
+                "operationId": "a97e3c7ee0f8da8e75d4537bb4b0fd60",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the Pix",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PixResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Pix"
+                ],
+                "summary": "Update a specific Pix",
+                "description": "Update a specific Pix by its ID.",
+                "operationId": "bec72b4ad72552c24dc3844680930680",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the Pix",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PixResource"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
             }
         }
     },
