@@ -181,12 +181,16 @@ class PixController extends BaseController
      *     tags={"Pix"},
      *     summary="Update a specific Pix",
      *     description="Update a specific Pix by its ID.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/PixResource")
+     *     ),
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
      *         required=true,
      *         description="ID of the Pix",
-     *         @OA\Schema(type="integer")
+     *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(
      *         response=200,
