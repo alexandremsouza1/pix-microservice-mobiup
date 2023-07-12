@@ -34,7 +34,7 @@ class PixGetNetAdapter implements PixAdapterInterface
             $object->$key = $value;
         }
 
-        $object->amount = $data['amount'];
+        $object->amount = intval($data['amount']);
 
 
         $object->order_id = $data['paymentId'];
