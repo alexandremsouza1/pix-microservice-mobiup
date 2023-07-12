@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Adapters\Interfaces\PixAdapterInterface;
 use App\Adapters\PixItauAdapter;
+use App\Adapters\PixGetNetAdapter;
 use App\Models\Pix;
 use App\Repositories\PixRepository;
 use App\Services\PixService;
@@ -18,7 +19,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(PixAdapterInterface::class, PixItauAdapter::class);
+        $classAdapted = null;
+
+        switch (env('GATEWAY_CHOOSED')) {
+            case 'GETNET':
+                $classAdapted = PixGetNetAdapter::class;
+                break;
+            case 'ITAU':
+                $classAdapted = PixItauAdapter::class;
+                break;
+            default:
+                $classAdapted = PixItauAdapter::class;
+                break;
+        }
+
+        $this->app->singleton(PixAdapterInterface::class, $classAdapted);
     
         $this->app->singleton(PixRepository::class, function ($app) {
             return new PixRepository($app->make(Pix::class));
