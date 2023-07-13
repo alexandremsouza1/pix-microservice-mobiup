@@ -8,12 +8,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-    - DB_CONNECTION=mongodb
-    - DB_HOST=mongodb
-    - DB_PORT=27017
-    - DB_DATABASE=mydatabase
-    - DB_USERNAME=root
-    - DB_PASSWORD=root
+    - GATEWAY_CHOOSED=ITAU
     volumes:
       - .:/var/www/html
     depends_on:
